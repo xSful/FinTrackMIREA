@@ -58,24 +58,13 @@
             }
             return days;
         },
-        draw: function(month, year, div_id, callback, selected) { // month = 1-12, year = 1-9999
+        draw: function(month, year, div_id, callback, selected) { 
             const today = new Date();
             const todayDay = today.getDate();
             const todayMonth = today.getMonth() + 1;
             const todayYear = today.getFullYear();
             let todayClass = '';
 
-            // Use UTC functions here because the date field does not contain time
-            // and using the UTC function variants prevent the local time offset
-            // from altering the date, specifically the day field.  For example:
-            //
-            // ```
-            // var x = new Date('2013-10-02');
-            // var day = x.getDate();
-            // ```
-            //
-            // The day variable above will be 1 instead of 2 in, say, US Pacific time
-            // zone.
             let isSelectedMonth = false;
             if (typeof selected !== 'undefined') {
                 isSelectedMonth = (selected.getUTCFullYear() === year && (selected.getUTCMonth() + 1) === month);
@@ -89,7 +78,6 @@
             quickElement('caption', calTable, CalendarNamespace.monthsOfYear[month - 1] + ' ' + year);
             const tableBody = quickElement('tbody', calTable);
 
-            // Draw days-of-week header
             let tableRow = quickElement('tr', tableBody);
             for (let i = 0; i < 7; i++) {
                 quickElement('th', tableRow, CalendarNamespace.daysOfWeek[(i + CalendarNamespace.firstDayOfWeek) % 7]);
@@ -100,7 +88,6 @@
 
             let nonDayCell;
 
-            // Draw blanks before first of month
             tableRow = quickElement('tr', tableBody);
             for (let i = 0; i < startingPos; i++) {
                 nonDayCell = quickElement('td', tableRow, ' ');
@@ -151,13 +138,7 @@
         }
     };
 
-    // Calendar -- A calendar instance
     function Calendar(div_id, callback, selected) {
-        // div_id (string) is the ID of the element in which the calendar will
-        //     be displayed
-        // callback (string) is the name of a JavaScript function that will be
-        //     called with the parameters (year, month, day) when a day in the
-        //     calendar is clicked
         this.div_id = div_id;
         this.callback = callback;
         this.today = new Date();
